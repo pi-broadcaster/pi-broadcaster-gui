@@ -5,12 +5,35 @@
         <meta charset="UTF-8">
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <link rel="stylesheet" href="./stylesheet/style.css">
-        <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-        <script src="./script/renderrer.js"></script>
-        <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="./stylesheet/bootstrap.min.css">
+        <link rel="stylesheet" href="./stylesheet/outlined.css">
+        <script src="./script/bootstrap.bundle.min.js" defer></script>
+        <script src="./script/renderrer.js" type="module" defer></script>
     </head>
     <body>
-        <div id="status" class="container-fluid">lol</div>
-        <div id="table" class="container-fluid"></div>
+        <div id="status" class="container-fluid fixed-top"></div>
+
+        <div id="table-box" class="container-fluid">
+            <table id="table" class="table table-hover table-bordered table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th class="text-center w-15">STT</th>
+                        <th class="text-center w-50">Lời nhắc/Liên kết danh sách phát</th>
+                        <th class="text-center w-25">Thời gian phát</th>
+                        <th class="text-center w-25">Ngày phát</th>
+                    </tr>
+                </thead>
+                <tbody id="content">
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div id="setting" class="container-fluid fixed-bottom">
+            <span class="material-icons-outlined px-2" data-bs-toggle="tooltip" title="Thêm lịch phát">add</span>
+            <span class="material-icons-outlined px-2" data-bs-toggle="tooltip" title="Xoá lịch phát">delete</span>
+            <span id="theme" class="material-icons-outlined px-2" data-bs-toggle="tooltip" title=""></span>
+            <p id="time" class="float-end"></p>
+        </div>
     </body>
 </html>

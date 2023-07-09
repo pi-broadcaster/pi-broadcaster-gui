@@ -1,16 +1,35 @@
 @media (prefers-color-scheme: dark) {
-    * { background: black; color: white; }
+    * { background: #212121; color: white; }
 }
   
 @media (prefers-color-scheme: light) {
     * { background: white; color: black; }
 }
+th {
+    position: sticky;
+    top: 26px; 
+    z-index: 1; 
+}
+td {
+    text-align: center;
+}
 #status {
-    margin-bottom: 5px;
-    border-top: 1px solid;
     border-bottom: 1px solid;
+    font-size: 16px;
     height: 26px;
 }
-#table {
-    height: calc(100% - 26px);
+#table-box {
+    padding: 26px 0 0 0;
+    height: calc(100% - 26px - 35px);
+}
+#setting {
+    margin-top: 5px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    padding-top: 3px;
+    font-size: 16px;
+    height: 35px;
+}
+#time {
+    font-family: 'Courier New', Courier, monospace;
 }
