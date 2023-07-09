@@ -1,7 +1,16 @@
 @media (prefers-color-scheme: dark) {
-    body { background: #333; color: white; }
-  }
+    * { background: black; color: white; }
+}
   
-  @media (prefers-color-scheme: light) {
-    body { background: #fff; color: black; }
-  }
+@media (prefers-color-scheme: light) {
+    * { background: white; color: black; }
+}
+#status {
+    margin-bottom: 5px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    height: 26px;
+}
+#table {
+    height: calc(100% - 26px);
+}

@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, nativeTheme, globalShortcut} = require("electron")
+const {app, BrowserWindow, ipcMain} = require("electron")
 const path = require("path")
 
 function createWindow() {
@@ -14,15 +14,7 @@ function createWindow() {
     win.maximize()
 }
 
-function toggleTheme() {
-   if (nativeTheme.shouldUseDarkColors) nativeTheme.themeSource = "light"
-   else nativeTheme.themeSource = "dark"
-}
-
 app.whenReady().then(() => {
-    globalShortcut.register("CommandorControl+Alt+T", () => {
-        toggleTheme()
-    })
     createWindow()
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
