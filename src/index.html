@@ -11,16 +11,20 @@
         <script src="./script/renderrer.js" type="module" defer></script>
     </head>
     <body>
-        <div id="status" class="container-fluid fixed-top"></div>
+        <div id="title-bar" class="container-fluid fixed-top">
+            <span class="material-icons-outlined pe-2 position-relative">podcasts</span>
+            <span class="position-absolute">Bảng điều khiển</span>
+            <p id="status"></p>
+        </div>
 
         <div id="table-box" class="container-fluid">
-            <table id="table" class="table table-hover table-bordered table-striped table-dark">
+            <table id="table">
                 <thead>
                     <tr>
-                        <th class="text-center w-15">STT</th>
-                        <th class="text-center w-50">Lời nhắc/Liên kết danh sách phát</th>
-                        <th class="text-center w-25">Thời gian phát</th>
-                        <th class="text-center w-25">Ngày phát</th>
+                        <th class="w-15">STT</th>
+                        <th class="w-50">Lời nhắc/Liên kết danh sách phát</th>
+                        <th class="w-25">Thời gian phát</th>
+                        <th class="w-25">Ngày phát</th>
                     </tr>
                 </thead>
                 <tbody id="content">
