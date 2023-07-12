@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld("theme", {
     toggle: () => ipcRenderer.send("theme-toggle")
 })
 contextBridge.exposeInMainWorld("config", {
-    read: () => ipcRenderer.invoke("config-read")
+    read: () => ipcRenderer.invoke("config-read"),
+    update: (data) => ipcRenderer.send("config-update", data)
 })

@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="./stylesheet/style.css">
         <link rel="stylesheet" href="./stylesheet/bootstrap.min.css">
         <link rel="stylesheet" href="./stylesheet/outlined.css">
+        <script src="./script/jquery.min.js" defer></script>
         <script src="./script/bootstrap.bundle.min.js" defer></script>
         <script src="./script/renderrer.js" type="module" defer></script>
     </head>
@@ -23,6 +24,7 @@
                     <tr>
                         <th class="w-15">STT</th>
                         <th class="w-50">Lời nhắc/Liên kết danh sách phát</th>
+                        <th class="w-25">Loại</th>
                         <th class="w-25">Thời gian phát</th>
                         <th class="w-25">Ngày phát</th>
                     </tr>
@@ -34,10 +36,66 @@
         </div>
 
         <div id="setting" class="container-fluid fixed-bottom">
-            <span class="material-icons-outlined px-2" data-bs-toggle="tooltip" title="Thêm lịch phát">add</span>
-            <span class="material-icons-outlined px-2" data-bs-toggle="tooltip" title="Xoá lịch phát">delete</span>
-            <span id="theme" class="material-icons-outlined px-2" data-bs-toggle="tooltip" title=""></span>
-            <p id="time" class="float-end"></p>
+            <span id="add" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title="Thêm lịch phát">add</span>
+            <span id="remove" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title="Xoá lịch phát">delete</span>
+            <span id="edit" class="material-icons-outlined px-2" title="Chỉnh sửa lịch phát" data-bs-toggle="modal" data-bs-target="#editModal">edit</span>
+            <span id="theme" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title=""></span>
+            <p id="time-display" class="float-end"></p>
         </div>
+
+        <div class="modal fade" data-bs-backdrop="static" id="editModal">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen-xxl-down">
+              <div class="modal-content">
+          
+                <div class="modal-header">
+                  <h4 class="modal-title" id="title">- Lịch phát số </h4>
+                </div>
+          
+                <div class="modal-body">
+
+                    <label>- Loại lịch phát: </label>
+                    <div class="form-check ms-3 mt-2">
+                        <input type="radio" class="form-check-input" id="text" name="type" value="text">
+                        <label class="form-check-label" for="text">Lời nhắc</label>
+                      </div>
+                      <div class="form-check ms-3 mb-3 mt-2">
+                        <input type="radio" class="form-check-input" id="link" name="type" value="link">
+                        <label class="form-check-label" for="link">Liên kết danh sách phát</label>
+                      </div>
+
+                    <label id="inp-label"></label>
+                    <textarea id="cont" class="mt-3"></textarea>
+
+                    <div id="table-box" class="container-fluid">
+                        <table id="edit-table" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="w-15">STT</th>
+                                    <th class="w-25">Thời gian phát</th>
+                                    <th class="w-50">Ngày phát</th>
+                                </tr>
+                            </thead>
+                            <tbody id="edit-content">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="edit-setting" class="container-fluid fixed-bottom">
+                        <span id="edit-add" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title="Thêm lịch phát">add</span>
+                        <span id="edit-remove" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title="Xoá lịch phát">delete</span>
+                        <span id="edit-theme" class="material-icons-outlined px-2" data-bs-toggle="tooltip" data-trigger="hover" title=""></span>
+                        <p id="edit-time-display" class="float-end"></p>
+                    </div>
+                </div>
+          
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="cancel">Huỷ bỏ</button>
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="submit">Đồng ý</button>
+                </div>
+            </div>
+            </div>
+        </div>          
+
     </body>
 </html>
