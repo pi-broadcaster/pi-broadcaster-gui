@@ -1,7 +1,7 @@
 {
   "name": "pi-broadcaster",
-  "version": "2.0.0",
-  "description": "Pi Broadcaster Manager GUI",
+  "version": "1.0.0",
+  "description": "Pi Broadcaster Manager GUI client",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
