@@ -142,5 +142,6 @@ dist
 .svelte-kit
 
 data/*
+test.js
 
 # End of https://www.toptal.com/developers/gitignore/api/node
