@@ -5,7 +5,10 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,19 @@
   "homepage": "https://github.com/pham-tuyen/pi-broadcaster#readme",
   "devDependencies": {
     "electron": "^25.2.0",
+    "electron-builder": "^24.4.0"
+  },
+  "build": {
+    "appId": "pi.broadcaster.manager",
+    "productName": "Pi Broadcaster Manager",
+    "win": {
+      "target": {
+        "target": "msi",
+        "arch": "ia32"
+      }
+    }
+  },
+  "dependencies": {
     "ssh2": "^1.14.0",
     "ssh2-sftp-client": "^9.1.0"
   }
