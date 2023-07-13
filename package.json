@@ -26,7 +26,7 @@
   },
   "build": {
     "appId": "pi.broadcaster.manager",
-    "productName": "Pi Broadcaster Manager",
+    "productName": "Bảng điều khiển",
     "win": {
       "target": {
         "target": "msi",

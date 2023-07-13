@@ -159,7 +159,8 @@ document.getElementById("add").addEventListener("click", () => {
         "tm": [{
             "time": 0,
             "day": []
-        }]
+        }],
+        "index": 0
     })
     setRow(conf.length - 1)
     triggerSelectRow()
