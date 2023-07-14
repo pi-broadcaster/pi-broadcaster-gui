@@ -32,7 +32,7 @@ function createWindow() {
     win.maximize()
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(() => {/*
     let client = new sftp();
     
     client.connect(config)
@@ -46,7 +46,7 @@ app.whenReady().then(() => {
     })
     .then(() => {
         console.log("get ok")
-        client.end();
+        client.end();*/
         //theme handle
         ipcMain.handle("theme-get", () => {
             return (nativeTheme.shouldUseDarkColors) ? "light" : "dark"
@@ -74,7 +74,7 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
         win.on("close", () => {
             console.log("window closing")
-        })
+        })/*
     })
     .catch(err => {
         fin = false
@@ -95,17 +95,40 @@ app.whenReady().then(() => {
         e.on("closed", () => {
             if (win) win.close()
         })
-    });
+    });*/
 })
 
 async function uploadFile(localFile, remoteFile) {
     let client = new sftp()
     await client.connect(config)
-    console.log(`Uploading ${localFile} to ${remoteFile} ...`);
-    try {
-        await client.put(localFile, remoteFile);
-        console.log("put ok")
-    } catch (err) {
+    .then(async () => {
+        console.log(`Uploading ${localFile} to ${remoteFile} ...`);
+        await client.put(localFile, remoteFile)
+        .then(() => {
+            console.log("put ok")  
+        })
+        .catch((err) => {
+            fin = false
+            console.error('Uploading failed:', err);
+            const e = new BrowserWindow({
+                titleBarStyle: "hidden",
+                titleBarOverlay: {
+                    color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+                    symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+                    height: 26
+                },
+                autoHideMenuBar: true,
+                webPreferences: {
+                    preload: path.join(__dirname, "src/script/preload.js")
+                }
+            })
+            e.loadFile(path.join(__dirname, "src/err.html"))
+            e.on("closed", () => {
+                if (win) win.close()
+            })
+        })
+    })
+    .catch((err) => {
         fin = false
         console.error('Uploading failed:', err);
         const e = new BrowserWindow({
@@ -124,7 +147,7 @@ async function uploadFile(localFile, remoteFile) {
         e.on("closed", () => {
             if (win) win.close()
         })
-    }
+    })
     client.end();
 }
 
@@ -145,5 +168,5 @@ app.on("window-all-closed", async () => {
         }).start();
     }
     console.log("ok fin", fin)
-    setTimeout(() => { console.log("wait"); if(out || !fin) app.quit(); }, 1000)
+    setTimeout(() => { console.log("wait"); if (out || !fin) app.quit(); }, 1000)
 });

@@ -94,6 +94,7 @@ function setRow(i) {
     row.cells[3].innerHTML = row.cells[3].innerHTML.substr(0, row.cells[3].innerHTML.length - 2)
     conf[i].tm.forEach(tim => {
         tim.day.forEach(wkday => row.cells[4].innerHTML += `${(wkday !== 6) ? (wkday + 2).toString() : "CN"}, `)
+        row.cells[4].innerHTML += "<br>"
     })
 }
 function setRowEdit(tim, i) {
@@ -209,7 +210,7 @@ function isValidLink(url) {
 function linkParse(url){
     let reg = new RegExp("[&?]list=([a-z0-9_]+)","i");
     let match = reg.exec(url);
-    if (match&&match[1].length>0&&youtube_validate(url)){
+    if (match&&match[1].length>0&&isValidLink(url)){
         return match[1];
     }else{
         return null
@@ -231,11 +232,11 @@ document.getElementById("submit").addEventListener("click", () => {
     }
     for (let i = 0; i < cntEdit.rows.length; i++) {
         conf[selected].tm[i].time = timeStringToFloat(cntEdit.rows[i].cells[1].childNodes[0].value)
+        let fq = []
         cntEdit.rows[i].cells[2].childNodes[0].value.replace(/ /g, "").split(",").forEach(wkday => {
-            if (typeof(wkday.toString()) === "number") {
-                conf[selected].tm[i].day.push((wkday === "CN") ? 6 : (wkday.toString() - 2))
-            }
+            fq.push((wkday === "CN") ? 6 : (parseInt(wkday) - 2))
         })
+        conf[selected].tm[i].day = fq
     }
     window.config.update(JSON.stringify(conf))
     for(let i = 0; i < len; i++) {
@@ -254,4 +255,10 @@ document.getElementById("cancel").addEventListener("click", () => {
     for(let i = 0; i < len; i++) {
         cntEdit.deleteRow(0)
     }
+    $("#content").load(location.href + " #content", () => {
+        for (let i = 0; i < conf.length; i++) {
+            setRow(i)
+        }
+        triggerSelectRow()
+    })
 })
