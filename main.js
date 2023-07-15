@@ -47,7 +47,7 @@ app.whenReady().then(async () => {
             preload: path.join(__dirname, "src/script/preload.js")
         }
     })
-    start.loadFile(path.join(__dirname, "src/wait.html"))
+    start.loadFile(path.join(__dirname, "src/start.html"))
     await client.connect(config)
     .then(() => {
         console.log("get")
@@ -183,7 +183,7 @@ app.on("window-all-closed", async () => {
                 preload: path.join(__dirname, "src/script/preload.js")
             }
         })
-        end.loadFile(path.join(__dirname, "src/wait.html"))
+        end.loadFile(path.join(__dirname, "src/end.html"))
         await uploadFile(localPath, remotePath)
         let ssh = new SSH({
             host: 'pi.local',
@@ -197,5 +197,23 @@ app.on("window-all-closed", async () => {
         }).start();
     }
     console.log("ok fin", fin)
+    if (fin) {
+        const succ = new BrowserWindow({
+            titleBarStyle: "hidden",
+            titleBarOverlay: {
+                color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+                symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+                height: 26
+            },
+            autoHideMenuBar: true,
+            webPreferences: {
+                preload: path.join(__dirname, "src/script/preload.js")
+            }
+        })
+        succ.loadFile(path.join(__dirname, "src/err.html"))
+        succ.on("closed", () => {
+            if (end) end.close()
+        })
+    }
     setTimeout(() => { console.log("wait"); if (BrowserWindow.getAllWindows().length === 0) app.quit(); }, 1000)
 });
