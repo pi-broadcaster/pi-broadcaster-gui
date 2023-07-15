@@ -4,7 +4,7 @@ const fs = require("fs")
 const sftp = require("ssh2-sftp-client")
 const SSH = require('simple-ssh');
 
-var win
+var win, end
 let remotePath = '/media/PB/config.json';
 let localPath = path.join(__dirname, "data/config.json");
 let config = {
@@ -100,6 +100,7 @@ app.whenReady().then(() => {
 
 async function uploadFile(localFile, remoteFile) {
     let client = new sftp()
+    console.log("prepare put")
     await client.connect(config)
     .then(async () => {
         console.log(`Uploading ${localFile} to ${remoteFile} ...`);
@@ -145,7 +146,7 @@ async function uploadFile(localFile, remoteFile) {
         })
         e.loadFile(path.join(__dirname, "src/err.html"))
         e.on("closed", () => {
-            if (win) win.close()
+            if (end) end.close()
         })
     })
     client.end();
@@ -155,6 +156,19 @@ app.on("window-all-closed", async () => {
     console.log("window closed")
     let out = false
     if (fin) {
+        end = new BrowserWindow({
+            titleBarStyle: "hidden",
+            titleBarOverlay: {
+                color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+                symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+                height: 26
+            },
+            autoHideMenuBar: true,
+            webPreferences: {
+                preload: path.join(__dirname, "src/script/preload.js")
+            }
+        })
+        end.loadFile(path.join(__dirname, "src/wait.html"))
         await uploadFile(localPath, remotePath)
         let ssh = new SSH({
             host: 'pi.local',
@@ -168,5 +182,5 @@ app.on("window-all-closed", async () => {
         }).start();
     }
     console.log("ok fin", fin)
-    setTimeout(() => { console.log("wait"); if (out || !fin) app.quit(); }, 1000)
+    setTimeout(() => { console.log("wait"); if (BrowserWindow.getAllWindows().length === 0) app.quit(); }, 1000)
 });
