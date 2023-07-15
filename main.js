@@ -4,7 +4,7 @@ const fs = require("fs")
 const sftp = require("ssh2-sftp-client")
 const SSH = require('simple-ssh');
 
-var win, end
+var win, end, start
 let remotePath = '/media/PB/config.json';
 let localPath = path.join(__dirname, "data/config.json");
 let config = {
@@ -32,10 +32,23 @@ function createWindow() {
     win.maximize()
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
     let client = new sftp();
-    
-    client.connect(config)
+
+    start = new BrowserWindow({
+        titleBarStyle: "hidden",
+        titleBarOverlay: {
+            color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+            symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+            height: 26
+        },
+        autoHideMenuBar: true,
+        webPreferences: {
+            preload: path.join(__dirname, "src/script/preload.js")
+        }
+    })
+    start.loadFile(path.join(__dirname, "src/wait.html"))
+    await client.connect(config)
     .then(() => {
         console.log("get")
         return client.get(remotePath, localPath, {
@@ -48,6 +61,7 @@ app.whenReady().then(() => {
         console.log("get ok")
         client.end();
         //theme handle
+        if (start) start.close()
         ipcMain.handle("theme-get", () => {
             return (nativeTheme.shouldUseDarkColors) ? "light" : "dark"
         })
@@ -94,6 +108,7 @@ app.whenReady().then(() => {
         e.loadFile(path.join(__dirname, "src/err.html"))
         e.on("closed", () => {
             if (win) win.close()
+            if (start) start.close()
         })
     });
 })
@@ -153,7 +168,7 @@ async function uploadFile(localFile, remoteFile) {
 }
 
 app.on("window-all-closed", async () => {
-    console.log("window closed")
+    console.log("window closed", fin)
     let out = false
     if (fin) {
         end = new BrowserWindow({
