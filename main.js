@@ -32,7 +32,7 @@ function createWindow() {
     win.maximize()
 }
 
-app.whenReady().then(() => {/*
+app.whenReady().then(() => {
     let client = new sftp();
     
     client.connect(config)
@@ -46,7 +46,7 @@ app.whenReady().then(() => {/*
     })
     .then(() => {
         console.log("get ok")
-        client.end();*/
+        client.end();
         //theme handle
         ipcMain.handle("theme-get", () => {
             return (nativeTheme.shouldUseDarkColors) ? "light" : "dark"
@@ -74,7 +74,7 @@ app.whenReady().then(() => {/*
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
         win.on("close", () => {
             console.log("window closing")
-        })/*
+        })
     })
     .catch(err => {
         fin = false
@@ -95,7 +95,7 @@ app.whenReady().then(() => {/*
         e.on("closed", () => {
             if (win) win.close()
         })
-    });*/
+    });
 })
 
 async function uploadFile(localFile, remoteFile) {
