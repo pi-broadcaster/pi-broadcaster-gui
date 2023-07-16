@@ -6,7 +6,7 @@ const SSH = require('simple-ssh');
 
 var win, end, start
 let remotePath = '/media/PB/config.json';
-let localPath = path.join(__dirname, "config.json");
+let localPath = path.join("C:/Users/Public", "config.json");
 let config = {
     host: 'pi.local',
     port: 22,
@@ -76,11 +76,11 @@ app.whenReady().then(async () => {
         })
         //main handle
         ipcMain.handle("config-read", () => {
-            var data = fs.readFileSync(path.join(__dirname, "config.json"), "utf8")
+            var data = fs.readFileSync(path.join("C:/Users/Public", "config.json"), "utf8")
             return JSON.parse(data.toString("utf8"))
         })
         ipcMain.on("config-update", (event, arg) => {
-            fs.writeFile(path.join(__dirname, "config.json"), arg, (err) => {
+            fs.writeFile(path.join("C:/Users/Public", "config.json"), arg, (err) => {
                 if (err) throw(err)
             })
         })
