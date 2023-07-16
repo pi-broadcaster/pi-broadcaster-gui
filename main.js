@@ -89,6 +89,38 @@ app.whenReady().then(async () => {
         win.on("close", () => {
             console.log("window closing")
         })
+        win.on("closed", async () => {
+            console.log("window closed", fin)
+            let out = false
+            if (fin) {
+                end = new BrowserWindow({
+                    titleBarStyle: "hidden",
+                    titleBarOverlay: {
+                        color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+                        symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+                        height: 26
+                    },
+                    autoHideMenuBar: true,
+                    webPreferences: {
+                        preload: path.join(__dirname, "src/script/preload.js")
+                    }
+                })
+                end.loadFile(path.join(__dirname, "src/end.html"))
+                await uploadFile(localPath, remotePath)
+                let ssh = new SSH({
+                    host: 'pi.local',
+                    user: 'pi',
+                    pass: 'pi'
+                });
+                await ssh.exec("echo lol && sudo reboot", {
+                    out: function (stdout) { console.log("stdout ", stdout); out = true; },
+                    err: function (stderr) { console.log("stderr ", stderr); out = true; },
+                    exit: function (code) { console.log("code ", code); out = true; }
+                }).start();
+            }
+            console.log("ok fin", fin)
+            setTimeout(() => { console.log("wait"); if (BrowserWindow.getAllWindows().length === 0) app.quit(); }, 1000);
+        });        
     })
     .catch(err => {
         fin = false
@@ -122,6 +154,22 @@ async function uploadFile(localFile, remoteFile) {
         await client.put(localFile, remoteFile)
         .then(() => {
             console.log("put ok")  
+            const succ = new BrowserWindow({
+                titleBarStyle: "hidden",
+                titleBarOverlay: {
+                    color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
+                    symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
+                    height: 26
+                },
+                autoHideMenuBar: true,
+                webPreferences: {
+                    preload: path.join(__dirname, "src/script/preload.js")
+                }
+            })
+            succ.loadFile(path.join(__dirname, "src/succ.html"))
+            succ.on("closed", () => {
+                if (end) end.close()
+            })
         })
         .catch((err) => {
             fin = false
@@ -146,7 +194,7 @@ async function uploadFile(localFile, remoteFile) {
     })
     .catch((err) => {
         fin = false
-        console.error('Uploading failed:', err);
+        console.error('Prep failed:', err);
         const e = new BrowserWindow({
             titleBarStyle: "hidden",
             titleBarOverlay: {
@@ -167,53 +215,3 @@ async function uploadFile(localFile, remoteFile) {
     client.end();
 }
 
-app.on("window-all-closed", async () => {
-    console.log("window closed", fin)
-    let out = false
-    if (fin) {
-        end = new BrowserWindow({
-            titleBarStyle: "hidden",
-            titleBarOverlay: {
-                color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
-                symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
-                height: 26
-            },
-            autoHideMenuBar: true,
-            webPreferences: {
-                preload: path.join(__dirname, "src/script/preload.js")
-            }
-        })
-        end.loadFile(path.join(__dirname, "src/end.html"))
-        await uploadFile(localPath, remotePath)
-        let ssh = new SSH({
-            host: 'pi.local',
-            user: 'pi',
-            pass: 'pi'
-        });
-        ssh.exec("echo lol && sudo reboot", {
-            out: function (stdout) { console.log("stdout ", stdout); out = true; },
-            err: function (stderr) { console.log("stderr ", stderr); out = true; },
-            exit: function (code) { console.log("code ", code); out = true; }
-        }).start();
-    }
-    console.log("ok fin", fin)
-    if (fin) {
-        const succ = new BrowserWindow({
-            titleBarStyle: "hidden",
-            titleBarOverlay: {
-                color: (nativeTheme.shouldUseDarkColors) ? "#212121" : "#ffffff",
-                symbolColor: (nativeTheme.shouldUseDarkColors) ? "#ffffff" : "#000000",
-                height: 26
-            },
-            autoHideMenuBar: true,
-            webPreferences: {
-                preload: path.join(__dirname, "src/script/preload.js")
-            }
-        })
-        succ.loadFile(path.join(__dirname, "src/err.html"))
-        succ.on("closed", () => {
-            if (end) end.close()
-        })
-    }
-    setTimeout(() => { console.log("wait"); if (BrowserWindow.getAllWindows().length === 0) app.quit(); }, 1000)
-});
