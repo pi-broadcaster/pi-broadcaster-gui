@@ -154,7 +154,6 @@ document.getElementById("remove").addEventListener("click", () => {
 })
 document.getElementById("add").addEventListener("click", () => {
     conf.push({
-        "dir": (conf.length + 1).toString(),
         "type": "text",
         "id": "",
         "tm": [{
